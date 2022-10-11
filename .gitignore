@@ -1,0 +1,9 @@
+data/
+temp/
+outdir/
+vis/
+__pycache__/
+.DS_Store
+train_data_gen/get_train_params.py
+
+*.csv
