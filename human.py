@@ -38,6 +38,12 @@ def get_parser():
         default=False,
         help="create summary plots",
     )
+    parser.add_argument( 
+        "--plots-window-size",
+        type=int,
+        default=10,
+        help="Size of plotting window",
+    ) 
     parser.add_argument(
         "--verbose",
         action="store_true",
@@ -69,6 +75,7 @@ def main(args=None):
     n_episodes = args.n_episodes
     epsilon = args.epsilon
     agent = args.agent
+    plots_window_size = args.plots_window_size
 
     outputDirectory = f'{args.outdir}/{agent}'
     if not os.path.isdir(outputDirectory):
@@ -107,7 +114,7 @@ def main(args=None):
                 state.KN_lc['position'] = KN_idx
                 state.contaminant_lcs['position'] = state.contaminant_lcs['sim'].map(dict(zip(contaminants, contaminant_idx)))
                 game_start = time.time()
-                choice_data = plot_utils.plot_state(pd.concat([state.KN_lc, state.contaminant_lcs]), plotName, interact=True)
+                choice_data = plot_utils.plot_state(pd.concat([state.KN_lc, state.contaminant_lcs]), plotName, title=f'Episode {k}: Observation {timestep}', interact=True, plots_window_size=plots_window_size, number_of_transients=defs.N)
                 #convert choice_data to action vector
                 action = np.zeros((defs.n_filt * defs.N, 1))
                 choice_idx = 3*(choice_data['position'])+choice_data['passband']
