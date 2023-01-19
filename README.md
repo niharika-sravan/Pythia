@@ -18,5 +18,6 @@ Note: while you get a reward 1 regardless of which filter you obtain the observa
 ## Installation and Data files
 
 Environment: coming soon...
+
 Download [this](https://1drv.ms/u/s!At8xIP1B4oiJi-cSo5g2jJbBE_Bi5A?e=mBOVNp) folder and place it in the directory that you have checked out. Keep the name data.
-Password: proti_Pythia
+Password: `proti_Pythia`

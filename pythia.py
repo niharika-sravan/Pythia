@@ -158,7 +158,6 @@ def get_photo(lc_all, lc, time_obs, filter):
       set_lim(obs, float(defs.lim2_ToO.sample()))
   else: #FIXME: using same as r
       set_lim(obs, float(defs.lim2_ToO.sample()))
-  import pdb; pdb.set_trace()
   if (obs['mag_err'] != np.inf).item():
     obs = utils.estimate_mag_err(obs)
   obs['sim'] = sim
