@@ -28,7 +28,7 @@ horizon = 7
 n_filt = 3
 action_set = np.identity(n_filt * N)
 n_phot = 1
-reuse = horizon-2 # hyperparamter to tune: how many times to go over same episode
+reuse = 5 # hyperparamter to tune: how many times to go over same episode
 
 from keras.applications.xception import Xception
 model = Xception(weights='imagenet', include_top=False, pooling='max')

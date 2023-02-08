@@ -83,6 +83,5 @@ for i,alpha in enumerate(alpha_list):
                                           columns = ['w_name', 'mean', 'stddev', 'frac > 0']
                                           )
                       ])
-
       summ.to_csv(outdir+'/summary.csv', index=False)
 

@@ -3,10 +3,10 @@ Our agent is presented 9 transient forced photometry light curves from the Zwick
 
 The objective is to maximize the number of follow-up assigned to the true KN. The maximum achievable score is 5. A random agent will achieve an expected score of 5/9 = 0.55
 
-## Pythia
+### Pythia
 Pythia uses linear value function approximation to learn the optimal Q∗ in SARSA(0). It currently performs 3x better than random.
 
-## Human players
+### Human players
 It is very hard to know what the optimal behavior policy (Pythia uses the Q-value and humans uses their brains) is for many problems. Therefore it is essential to compare against strong benchmarks to establish the utility of an approach. For our problem astronomers will provide the benchmark.
 
 To play against Pythia use: `python human.py --plots --verbose --agent <yourname> --n-episodes 10`

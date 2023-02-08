@@ -9,10 +9,10 @@ import matplotlib.gridspec as gridspec
 
 import defs
 
-dest = 'outdir/n9'
+dest = 'outdir/n9/rand2'
 
-alpha_list = [1e-2]#, 1e-3, 1e-1]
-gamma_list = [0.5]#, 0.9, 0.1]
+alpha_list = [1e-1]#, 1e-3, 1e-1]
+gamma_list = [0.9]#, 0.9, 0.1]
 n_list = [2.]
 smooth = 50
 rows,cols = len(alpha_list), len(gamma_list)
@@ -31,7 +31,7 @@ for n in n_list:
   R_tau = np.zeros(n_episodes)
   for i in range(np.shape(R_tau)[0]):
     R_rand = 0
-    for j in range(1, defs.horizon-1): #SARSA agent is not estimating reward in timestep 6 because no action at 7
+    for j in range(1, defs.horizon): #SARSA agent is not estimating reward in timestep 6 because no action at 7
       if random.randrange(0, defs.N) == 0: R_rand += 1
     R_tau[i] = R_rand
 
@@ -60,7 +60,7 @@ for n in n_list:
         sax[idx].set_xlim(0, 1150)
         sax[idx].set_ylim(0, 5.1)
         sax[idx].axhline(y = 5, c='#2ca02c', ls = 'dashdot')
-        sax[idx].axhline(y = (defs.horizon-2)/defs.N, c='#ff7f0e', ls = 'dashdot')
+        sax[idx].axhline(y = (defs.horizon-1)/defs.N, c='#ff7f0e', ls = 'dashdot')
         sax[idx].axvline(x = (1/0.03)**n, c = 'grey', ls = '--', lw = 0.7)
         sax[idx].axvline(x = (1/0.05)**n, c = 'grey', ls = '--', lw = 0.7)
         sax[idx].axvline(x = (1/0.1)**n, c = 'grey', ls = '--', lw = 0.7)
