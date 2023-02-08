@@ -24,8 +24,8 @@ for i,alpha in enumerate(alpha_list):
   for j,gamma in enumerate(gamma_list):
     train_status = pd.read_csv(dest+'/train_'+str(alpha)+'_'+str(gamma)+'_'+str(n)+'.csv')
     avg_score = train_status.groupby('k').mean()['R_tau'].rolling(window=smooth).mean()
-    for idx in avg_score[avg_score > 2.8*(defs.horizon-2)/defs.N].index:
-      if idx > 1150: continue
+    for idx in avg_score[avg_score > 2.5*(defs.horizon-2)/defs.N].index:
+      if defs.epsilon_/idx**(1./n) >= 0.05: continue
       w_file = dest+'/train_linw_'+str(alpha)+'_'+str(gamma)+'_'+str(n)+'_'+str(idx)+'.npy'
       with open(w_file, 'rb') as f:
         w = np.load(f)
