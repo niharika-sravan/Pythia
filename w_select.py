@@ -61,7 +61,7 @@ for i,alpha in enumerate(alpha_list):
         KN_lc = KN_lc_.copy()
         contaminant_lcs = contaminant_lcs_.copy()
         info = []
-        for timestep in range(1, defs.horizon-1):
+        for timestep in range(1, defs.horizon):
           state = pythia.State(KN_lc, KN_idx, contaminants, contaminant_lcs, contaminant_idx, timestep)
           e_greedy_action = pythia.e_greedy(state, w, epsilon)
           reward = pythia.get_reward(e_greedy_action, KN_idx)
