@@ -28,8 +28,8 @@ n_list = [2.]#, 3.]
 for i, alpha in enumerate(alpha_list):
   for j, gamma in enumerate(gamma_list):
     for k, n in enumerate(n_list):
-      #cmd = 'python train.py '+str(alpha)+' '+str(gamma)+' '+str(n)+' random'
-      cmd = 'python train.py '+str(alpha)+' '+str(gamma)+' '+str(n)+' resume'
+      cmd = 'python train.py '+str(alpha)+' '+str(gamma)+' '+str(n)+' random'
+      #cmd = 'python train.py '+str(alpha)+' '+str(gamma)+' '+str(n)+' resume'
       #cmd = 'python train.py '+str(alpha)+' '+str(gamma)+' '+str(n)+' outdir/n9/rand/train_linw_0.1_0.9_2.0_461.npy'
       job = 'train_'+str(alpha)+'_'+str(gamma)+'_'+str(n)
       with open('temp/'+job+'.sub', 'w') as f:
