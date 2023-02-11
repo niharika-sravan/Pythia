@@ -9,10 +9,10 @@ import matplotlib.gridspec as gridspec
 
 import defs
 
-dest = 'outdir/n9/rand2'
+dest = 'outdir/n9/term_too'
 
-alpha_list = [1e-1]#, 1e-3, 1e-1]
-gamma_list = [0.9]#, 0.9, 0.1]
+alpha_list = [1e-1, 1e-2, 1e-3]
+gamma_list = [0.9, 0.5, 0.1]
 n_list = [2.]
 smooth = 50
 rows,cols = len(alpha_list), len(gamma_list)
@@ -58,8 +58,8 @@ for n in n_list:
         print(alpha, gamma, n, avg_score.max())
         #sax[idx].set_title(r'$\gamma=$'+str(gamma)+r'; $\alpha=$'+str(alpha), fontsize = 10)
         sax[idx].set_xlim(0, 1150)
-        sax[idx].set_ylim(0, 5.1)
-        sax[idx].axhline(y = 5, c='#2ca02c', ls = 'dashdot')
+        sax[idx].set_ylim(0, 6.1)
+        sax[idx].axhline(y = 6, c='#2ca02c', ls = 'dashdot')
         sax[idx].axhline(y = (defs.horizon-1)/defs.N, c='#ff7f0e', ls = 'dashdot')
         sax[idx].axvline(x = (1/0.03)**n, c = 'grey', ls = '--', lw = 0.7)
         sax[idx].axvline(x = (1/0.05)**n, c = 'grey', ls = '--', lw = 0.7)
@@ -72,7 +72,7 @@ for n in n_list:
         sax[idx].text(405, 2.2, '5% explore', rotation = 90, fontsize = 6)
         sax[idx].text(1116, 2.2, '3% explore', rotation = 90, fontsize = 6)
         sax[idx].text(450, 0.3, 'Avg Random Score', fontsize=6, color = '#ff7f0e')
-        sax[idx].text(500, 4.7, 'Max Score', fontsize=6, color = '#2ca02c')
+        sax[idx].text(500, 5.7, 'Max Score', fontsize=6, color = '#2ca02c')
 
   sax[idx].legend(fontsize = 7, loc = 1)
 

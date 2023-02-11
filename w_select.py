@@ -24,7 +24,7 @@ for i,alpha in enumerate(alpha_list):
   for j,gamma in enumerate(gamma_list):
     train_status = pd.read_csv(dest+'/train_'+str(alpha)+'_'+str(gamma)+'_'+str(n)+'.csv')
     avg_score = train_status.groupby('k').mean()['R_tau'].rolling(window=smooth).mean()
-    for idx in avg_score[avg_score > 2.5*(defs.horizon-2)/defs.N].index:
+    for idx in avg_score[avg_score > 2.5*(defs.horizon-1)/defs.N].index:
       if defs.epsilon_/idx**(1./n) >= 0.05: continue
       w_file = dest+'/train_linw_'+str(alpha)+'_'+str(gamma)+'_'+str(n)+'_'+str(idx)+'.npy'
       with open(w_file, 'rb') as f:
@@ -32,7 +32,7 @@ for i,alpha in enumerate(alpha_list):
       w_name = os.path.splitext(os.path.basename(w_file))[0]
       if os.path.exists(outdir+'/'+w_name):
         score = pd.read_csv(outdir+'/'+w_name+'/score.csv')
-        summ = pd.concat([summ, pd.DataFrame([[w_name, score['10'].mean(), score['10'].std(), 
+        summ = pd.concat([summ, pd.DataFrame([[w_name, score['10'].mean(), score['10'].std(),
                                                score[score['10'] > 0].shape[0]/n_episodes]],
                                             columns = ['w_name', 'mean', 'stddev', 'frac > 0']
                                             )
@@ -55,7 +55,7 @@ for i,alpha in enumerate(alpha_list):
             continue
         if (contaminant_lcs_.groupby(['sim']).apply(lambda x: x['passband'].nunique()) < defs.n_phot).any():
             continue
-    
+
         k += 1
         R_tau = 0
         KN_lc = KN_lc_.copy()
@@ -84,4 +84,3 @@ for i,alpha in enumerate(alpha_list):
                                           )
                       ])
       summ.to_csv(outdir+'/summary.csv', index=False)
-

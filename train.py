@@ -82,7 +82,7 @@ while k < n_episodes:
                                                         timestep+1, e_greedy_action)
       e_greedy_action_prime = pythia.e_greedy(state_prime, w, epsilon)
 
-      if timestep != defs.horizon:
+      if timestep != defs.horizon-1:
         td0 = reward + gamma * pythia.lin_VFA(state_prime, e_greedy_action_prime, w)[0,0]
       else:
         td0 = reward
