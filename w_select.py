@@ -16,29 +16,28 @@ outdir = 'outdir/test/w_select'
 dest = 'outdir/n9'
 alpha_list = [1e-1, 1e-2, 1e-3]
 gamma_list = [0.9, 0.5, 0.1]
-n = 2.
+n = 3.
 smooth = 50
 
-summ = pd.DataFrame()
+if os.path.isfile(outdir+'/summary.csv'):
+  summ = pd.read_csv(outdir+'/summary.csv')
+else:
+  summ = pd.DataFrame()
+
 for i,alpha in enumerate(alpha_list):
   for j,gamma in enumerate(gamma_list):
     train_status = pd.read_csv(dest+'/train_'+str(alpha)+'_'+str(gamma)+'_'+str(n)+'.csv')
     avg_score = train_status.groupby('k').mean()['R_tau'].rolling(window=smooth).mean()
     for idx in avg_score[avg_score > 2.5*(defs.horizon-1)/defs.N].index:
-      if defs.epsilon_/idx**(1./n) >= 0.05: continue
+      if defs.epsilon_/idx**(1./n) >= 0.1: continue
       w_file = dest+'/train_linw_'+str(alpha)+'_'+str(gamma)+'_'+str(n)+'_'+str(idx)+'.npy'
-      with open(w_file, 'rb') as f:
-        w = np.load(f)
       w_name = os.path.splitext(os.path.basename(w_file))[0]
       if os.path.exists(outdir+'/'+w_name):
-        score = pd.read_csv(outdir+'/'+w_name+'/score.csv')
-        summ = pd.concat([summ, pd.DataFrame([[w_name, score['10'].mean(), score['10'].std(),
-                                               score[score['10'] > 0].shape[0]/n_episodes]],
-                                            columns = ['w_name', 'mean', 'stddev', 'frac > 0']
-                                            )
-                        ])
         continue
+      with open(w_file, 'rb') as f:
+        weights = np.load(f)
       lcs = pd.DataFrame()
+      behav = pd.DataFrame()
       score = pd.DataFrame()
       k = 0
       while k < n_episodes:
@@ -60,26 +59,25 @@ for i,alpha in enumerate(alpha_list):
         R_tau = 0
         KN_lc = KN_lc_.copy()
         contaminant_lcs = contaminant_lcs_.copy()
-        info = []
         for timestep in range(1, defs.horizon):
           state = pythia.State(KN_lc, KN_idx, contaminants, contaminant_lcs, contaminant_idx, timestep)
-          e_greedy_action = pythia.e_greedy(state, w, epsilon)
+          e_greedy_action = pythia.e_greedy(state, weights, epsilon)
           reward = pythia.get_reward(e_greedy_action, KN_idx)
           state_prime, KN_lc, contaminant_lcs, obs = pythia.next_state(KN_lc, KN_idx, contaminants, contaminant_lcs, contaminant_idx, timestep+1, e_greedy_action)
           R_tau += reward
-          info.extend([obs['sim'].item(), obs['passband'].item()])
-        info.append(R_tau)
+          info = [k, timestep, obs['sim'].item(), obs['passband'].item()]
+          behav = pd.concat([behav, pd.DataFrame([info], columns = ['episode', 'timestep', 'event_chosen', 'obs_passband'])])
+        score = pd.concat([score, pd.DataFrame([R_tau])])
         KN_lc['episode'] = k
         KN_lc['position'] = KN_idx
         contaminant_lcs['episode'] = k
         contaminant_lcs['position'] = contaminant_lcs['sim'].map(dict(zip(contaminants, contaminant_idx)))
         lcs = pd.concat([lcs, KN_lc, contaminant_lcs])
-        score = pd.concat([score, pd.DataFrame([info], index=[k])])
       os.makedirs(outdir+'/'+w_name)
       lcs.to_csv(outdir+'/'+w_name+'/lcs.csv', index=False)
-      score.to_csv(outdir+'/'+w_name+'/score.csv', index=False)
+      behav.to_csv(outdir+'/'+w_name+'/behav.csv', index=False)
       summ = pd.concat([summ, pd.DataFrame(
-                                          [[w_name, score[10].mean(), score[10].std(), score[score[10] > 0].shape[0]/n_episodes]],
+                                          [[w_name, score[0].mean(), score[0].std(), score[score[0] > 0].shape[0]/n_episodes]],
                                           columns = ['w_name', 'mean', 'stddev', 'frac > 0']
                                           )
                       ])

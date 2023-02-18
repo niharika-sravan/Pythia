@@ -99,6 +99,6 @@ while k < n_episodes:
       np.save(f, w)
     with open(dest+'/adam_obj_'+str(alpha)+'_'+str(gamma)+'_'+str(n)+'.pkl', 'wb') as f:
       pickle.dump(adam, f, pickle.HIGHEST_PROTOCOL)
-  if epsilon < 0.05 and train_status.groupby('k').mean()['R_tau'].rolling(window=50).mean().iloc[-1] > 2.5*(defs.horizon-1)/defs.N:
+  if epsilon < 0.1 and train_status.groupby('k').mean()['R_tau'].rolling(window=50).mean().iloc[-1] > 2.5*(defs.horizon-1)/defs.N:
     with open(dest+'/train_linw_'+str(alpha)+'_'+str(gamma)+'_'+str(n)+'_'+str(k)+'.npy', 'wb') as f:
       np.save(f, w)
