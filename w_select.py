@@ -14,7 +14,7 @@ data = defs.train_data('test')
 outdir = 'outdir/test/w_select'
 
 dest = 'outdir/n9'
-alpha_list = [1e-1, 1e-2, 1e-3]
+alpha_list = [1e-2, 1e-3]
 gamma_list = [0.9, 0.5, 0.1]
 n = 3.
 smooth = 50
@@ -28,7 +28,7 @@ for i,alpha in enumerate(alpha_list):
   for j,gamma in enumerate(gamma_list):
     train_status = pd.read_csv(dest+'/train_'+str(alpha)+'_'+str(gamma)+'_'+str(n)+'.csv')
     avg_score = train_status.groupby('k').mean()['R_tau'].rolling(window=smooth).mean()
-    for idx in avg_score[avg_score > 2.5*(defs.horizon-1)/defs.N].index:
+    for idx in avg_score[avg_score > 2.8*(defs.horizon-1)/defs.N].index:
       if defs.epsilon_/idx**(1./n) >= 0.1: continue
       w_file = dest+'/train_linw_'+str(alpha)+'_'+str(gamma)+'_'+str(n)+'_'+str(idx)+'.npy'
       w_name = os.path.splitext(os.path.basename(w_file))[0]

@@ -19,9 +19,13 @@ source /home/niharika/.bash_profile
 conda activate kne
 cd /expanse/lustre/projects/umn131/niharika/Pythia
 
+## submit the dependency that will start after the current job finishes
+sbatch --dependency=afterok:${{SLURM_JOBID}} temp/{0}.sub
+sleep 300
+
 '''
 
-alpha_list = [1e-1, 1e-2, 1e-3]
+alpha_list = [1e-2, 1e-3]
 gamma_list = [0.9, 0.5, 0.1]
 n_list = [3.]#, 3.]
 
@@ -30,11 +34,10 @@ for i, alpha in enumerate(alpha_list):
     for k, n in enumerate(n_list):
       #cmd = 'python train.py '+str(alpha)+' '+str(gamma)+' '+str(n)+' random'
       cmd = 'python train.py '+str(alpha)+' '+str(gamma)+' '+str(n)+' resume'
-      #cmd = 'python train.py '+str(alpha)+' '+str(gamma)+' '+str(n)+' outdir/n9/rand/train_linw_0.1_0.9_2.0_461.npy'
-      job = 'train_'+str(alpha)+'_'+str(gamma)+'_'+str(n)
-      with open('temp/'+job+'.sub', 'w') as f:
-        f.writelines(jobstr.format(job)+cmd)
-      proc = subprocess.Popen(['sbatch', 'temp/'+job+'.sub'])
+      job_name = 'train_'+str(alpha)+'_'+str(gamma)+'_'+str(n)
+      with open('temp/'+job_name+'.sub', 'w') as f:
+        f.writelines(jobstr.format(job_name)+cmd)
+      proc = subprocess.Popen(['sbatch', 'temp/'+job_name+'.sub'])
       time.sleep(0.2)
 
 '''
