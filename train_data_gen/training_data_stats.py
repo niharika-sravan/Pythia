@@ -14,9 +14,9 @@ for type in ['Ia','II','IIn','IIb','Ib','Ic','Ic-BL','SLSN-I','SLSN-II']:
   lcs=lcs.replace(np.inf,np.nan).dropna()
   print(type, lcs.groupby('sim').ngroups)
 
-  fig = plt.figure(figsize=(6,6))
-  fig.subplots_adjust(left=0.02,right=0.98,bottom=0.1,top=0.98,wspace=0.3,hspace=0.3)
-  rows,cols=3,2
+  fig = plt.figure(figsize=(6, 6))
+  fig.subplots_adjust(left=0.02, right=0.98, bottom=0.1, top=0.98, wspace=0.3, hspace=0.3)
+  rows, cols=3, 2
   gs = gridspec.GridSpec(rows,cols)
   sax = []
   for r in range(rows):
@@ -26,19 +26,19 @@ for type in ['Ia','II','IIn','IIb','Ib','Ic','Ic-BL','SLSN-I','SLSN-II']:
   hist, bins = np.histogram(lcs.groupby(['sim']).apply(lambda x: x.shape[0]),bins=np.arange(-0.5,10.,1))
   for name,group in lcs.groupby(['sim','passband']).apply(lambda x: x.shape[0]).groupby(level=1):
     hist, bins = np.histogram(group,bins=np.arange(-0.5,10.,1))
-    sax[0].step(bins, np.pad(hist, (1, 0)) / hist.max(), alpha=0.5,color=band_colors[name],lw=2)
+    sax[0].step(bins, np.pad(hist, (1, 0)) / hist.max(), alpha=0.5, color=band_colors[name],lw=2)
   hist, bins = np.histogram(lcs.groupby(['sim']).apply(lambda x: x.shape[0]),bins=np.arange(-0.5,10.,1))
   sax[0].step(bins, np.pad(hist, (1, 0)) / hist.max(),color='k',lw=0.5)
 
   for name,group in lcs.groupby(['sim','passband']).apply(lambda x: x['mag'].min()).groupby(level=1):
     hist, bins = np.histogram(group,bins=np.arange(16,22,0.5))
-    sax[1].step(bins, np.pad(hist, (1, 0)) / hist.max(), alpha=0.5,color=band_colors[name],lw=2)
+    sax[1].step(bins, np.pad(hist, (1, 0)) / hist.max(), alpha=0.5, color=band_colors[name],lw=2)
   hist, bins = np.histogram(lcs.groupby(['sim']).apply(lambda x: x['mag'].min()),bins=np.arange(16,22,0.5))
   sax[1].step(bins, np.pad(hist, (1, 0)) / hist.max(),color='k',lw=0.5)
 
   for name,group in lcs.groupby(['sim','passband']).apply(lambda x: (x['mjd']-x['tc'])[x['mag'].idxmin()]).groupby(level=1):
     hist, bins = np.histogram(group,bins=np.arange(0,4.5,0.2))
-    sax[2].step(bins, np.pad(hist, (1, 0)) / hist.max(), alpha=0.5,color=band_colors[name],lw=2)
+    sax[2].step(bins, np.pad(hist, (1, 0)) / hist.max(), alpha=0.5, color=band_colors[name],lw=2)
   hist, bins = np.histogram(lcs.groupby(['sim']).apply(lambda x: (x['mjd']-x['tc'])[x['mag'].idxmin()]),bins=np.arange(0,4.5,0.2))
   sax[2].step(bins, np.pad(hist, (1, 0)) / hist.max(),color='k',lw=0.5)
 
@@ -58,7 +58,7 @@ for type in ['Ia','II','IIn','IIb','Ib','Ic','Ic-BL','SLSN-I','SLSN-II']:
 
   for name,group in lcs.groupby(['sim','passband']).apply(lambda x: (x['mjd']-x['tc'])[x['mjd'].idxmin()]).groupby(level=1):
     hist, bins = np.histogram(group,bins=np.arange(0,4.5,0.2))
-    sax[4].step(bins, np.pad(hist, (1, 0)) / hist.max(), alpha=0.5,color=band_colors[name],lw=2)
+    sax[4].step(bins, np.pad(hist, (1, 0)) / hist.max(), alpha=0.5, color=band_colors[name],lw=2)
   hist, bins = np.histogram(lcs.groupby(['sim']).apply(lambda x: x['mjd'].min()-x['tc'][x['mjd'].idxmin()]),bins=np.arange(0,4.5,0.2))
   sax[4].step(bins, np.pad(hist, (1, 0)) / hist.max(),color='k',lw=0.5)
 
@@ -108,14 +108,14 @@ for type in ['Ia','II','IIn','IIb','Ib','Ic','Ic-BL','SLSN-I','SLSN-II']:
   for name,group in lcs.groupby(['sim','passband']).apply(lambda x: x['mag'].min()).groupby(level=1):
     if not name in band_colors.keys(): continue
     hist, bins = np.histogram(group,bins=np.arange(16,22,0.5))
-    sax[1].step(bins, np.pad(hist, (1, 0)) / hist.max(), alpha=0.5,color=band_colors[name],lw=2)
+    sax[1].step(bins, np.pad(hist, (1, 0)) / hist.max(), alpha=0.5, color=band_colors[name],lw=2)
   hist, bins = np.histogram(lcs[lcs['passband'].isin(band_colors.keys())].groupby(['sim']).apply(lambda x: x['mag'].min()),bins=np.arange(16,22,0.5))
   sax[1].step(bins, np.pad(hist, (1, 0)) / hist.max(),color='k',lw=0.5)
 
   for name,group in lcs.groupby(['sim','passband']).apply(lambda x: (x['mjd']-x['mjd'].min())[x['mag'].idxmin()]).groupby(level=1):
     if not name in band_colors.keys(): continue
     hist, bins = np.histogram(group,bins=np.arange(0,4.5,0.5))
-    sax[2].step(bins, np.pad(hist, (1, 0)) / hist.max(), alpha=0.5,color=band_colors[name],lw=2)
+    sax[2].step(bins, np.pad(hist, (1, 0)) / hist.max(), alpha=0.5, color=band_colors[name],lw=2)
   hist, bins = np.histogram(lcs[lcs['passband'].isin(band_colors.keys())].groupby(['sim']).apply(lambda x: (x['mjd']-x['mjd'].min())[x['mag'].idxmin()]),bins=np.arange(0,4.5,0.5))
   sax[2].step(bins, np.pad(hist, (1, 0)) / hist.max(),color='k',lw=0.5)
 

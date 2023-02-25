@@ -9,16 +9,16 @@ import matplotlib.gridspec as gridspec
 
 import defs
 
-dest = 'outdir/n9/term_too'
+dest = 'outdir/n9'
 
-alpha_list = [1e-1, 1e-2, 1e-3]
+alpha_list = [1e-2, 1e-3]
 gamma_list = [0.9, 0.5, 0.1]
 n_list = [3.]
 smooth = 50
 rows,cols = len(alpha_list), len(gamma_list)
 
 for n in n_list:
-  fig = plt.figure(figsize=(8,6))#(4, 2.5))
+  fig = plt.figure(figsize=(8,4))#(4, 2.5))
   fig.subplots_adjust(left=0.1, right=0.98, bottom=0.2, top=0.98, wspace=0.15, hspace=0.6)
   gs = gridspec.GridSpec(rows, cols)
   sax = []
@@ -67,7 +67,6 @@ for n in n_list:
         sax[idx].axvline(x = (1/1)**n, c = 'grey', ls = '--', lw = 0.7)
         sax[idx].set_xlabel('episodes')
         sax[idx].set_ylabel('score')
-        #sax[idx].text(10, 2.1, '100% explore', rotation = 90, fontsize = 6)
         sax[idx].text(155, 2.2, '20% explore', rotation = 90, fontsize = 6)
         sax[idx].text(1030, 2.2, '10% explore', rotation = 90, fontsize = 6)
         sax[idx].text(8030, 2.2, '5% explore', rotation = 90, fontsize = 6)
