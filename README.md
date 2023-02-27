@@ -9,11 +9,29 @@ Pythia uses linear value function approximation to learn the optimal Q∗ in SAR
 ### Human players
 It is very hard to know what the optimal behavior policy (Pythia uses the Q-value and humans uses their brains) is for many problems. Therefore it is essential to compare against strong benchmarks to establish the utility of an approach. For our problem astronomers will provide the benchmark.
 
-To play against Pythia use: `python human.py --plots --verbose --agent <yourname> --n-episodes 10`
+We will be playing several of the following games.
 
-You will see 9 forced photometry light curves in real-time and you will choose for which event and with filter do you want to obtain an additonal 300s exposure. You will not know which the true KN is. There will be 5 timestep per episode (one collection of 9 light curves per GW trigger scenario) and --n-episodes number of games to play.
+There are 9 forced photometry light curves from ZTF, one of which is a KN and the rest are a selection of GRB afterglows and supernovae of vanilla types. We start a game/episode (i.e. a collection of 9 light curves per GW trigger scenario) on day 2 after trigger: day 1's data has arrived and you need to choose for which event and with which filter (g, r, or i) you want to obtain a single additional 300s exposure at a random time during the next 24 hours. You will repeat the process on day 3, when data collected during day 2 by ZTF and the follow-up observation decided by you (marked as X) will be available. There are 6 timesteps in an episode, after which a new episode will begin with a new set of 9 light curves. Your goal is to maximize the number of follow-up allocated to the KN.
 
-Note: while you get a reward 1 regardless of which filter you obtain the observation in, you may want to think about how the information you get from that decision might help you in the next timestep.
+There will be two phases of this exercise.
+
+First is training, where you will learn to play the game. The true KN will be highlighted. You can play as many episodes as you like to learn to make decisions that maximize your score. Your actions and play time will be recorded.
+
+Next, you will be tested. In this phase, you will not know which the true KN is. You will play 100 episodes, for a total of 600 decisions (I know, sorry :disappointed: We need a statistically large sample). Once again, your responses and decision times will be recorded.
+
+Note 1: you can only select 1 filter and 1 event at any timestep. If you check Finished with none or more than one option selected in each, nothing will happen. Fix the issue, uncheck Finished, and check it again to proceed.
+
+Note 2: while you get a reward 1 regardless of which filter you obtain the observation in, you may want to think about how the information you get from that decision might help you in the next timestep.
+
+To train:
+`python human.py --train --agent <your initials>`
+
+Just close the plot window when you are done and want to take the test.
+
+To test:
+`python human.py --agent <your initials>`
+
+Please share the files in your folder outdir/<your initials> with Ari along with a few sentences on what your strategy was. 
 
 ## Installation and Data files
 

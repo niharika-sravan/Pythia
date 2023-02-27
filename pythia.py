@@ -136,7 +136,7 @@ def get_reward(action, KN_idx):
     reward = 0
   return reward
 
-def get_photo(lc_all, lc, time_obs, filter):
+def get_photo(lc_all, lc, time_obs, filter, agent):
   sim = lc['sim'].sample().item()
   tc = lc['tc'].sample().item()
   time = time_obs + tc
@@ -162,20 +162,20 @@ def get_photo(lc_all, lc, time_obs, filter):
     obs = utils.estimate_mag_err(obs)
   obs['sim'] = sim
   obs['tc'] = tc
-  obs['survey'] = 'Pythia'
+  obs['survey'] = agent
   return obs
 
-def next_state(KN_lc, KN_idx, contaminants, contaminant_lcs, contaminant_idx, timestep, action):
+def next_state(KN_lc, KN_idx, contaminants, contaminant_lcs, contaminant_idx, timestep, action, agent='Pythia'):
   # add action random during timestep (could be same bin as survey)
   event_select = get_event_id(action)
   filter_select = get_filter_id(action)
   time_obs = random.uniform(timestep-1, timestep)
   if event_select == KN_idx:
-    obs = get_photo(defs.KN_lc_all, KN_lc, time_obs, filter_select)
+    obs = get_photo(defs.KN_lc_all, KN_lc, time_obs, filter_select, agent)
     KN_lc = pd.concat([KN_lc, obs]) # contain action photometry
   else:
     cont_lc = contaminant_lcs[contaminant_lcs['sim'] == contaminants[contaminant_idx.index(event_select)]]
-    obs = get_photo(defs.contaminant_lc_all, cont_lc, time_obs, filter_select)
+    obs = get_photo(defs.contaminant_lc_all, cont_lc, time_obs, filter_select, agent)
     contaminant_lcs = pd.concat([contaminant_lcs, obs]) # contain action photometry
   state_prime = State(KN_lc, KN_idx, contaminants, contaminant_lcs, contaminant_idx, timestep)
   return state_prime, KN_lc, contaminant_lcs, obs
