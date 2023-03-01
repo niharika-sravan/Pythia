@@ -59,13 +59,13 @@ def main(args=None):
     if not os.path.isdir(outputDirectory):
         os.makedirs(outputDirectory)
 
-    data = defs.train_data('test')
+    if train: phase = 'train'
+    else: phase = 'test'
+    data = defs.train_data(phase)
 
-    if train: suff = '_train'
-    else: suff = ''
-    if os.path.isfile(os.path.join(outputDirectory, 'lcs'+suff+'.csv')):
-      lcs = pd.read_csv(os.path.join(outputDirectory, 'lcs'+suff+'.csv'))
-      behav = pd.read_csv(os.path.join(outputDirectory, 'behav'+suff+'.csv'))
+    if os.path.isfile(os.path.join(outputDirectory, 'lcs_'+phase+'.csv')):
+      lcs = pd.read_csv(os.path.join(outputDirectory, 'lcs_'+phase+'.csv'))
+      behav = pd.read_csv(os.path.join(outputDirectory, 'behav_'+phase+'.csv'))
       k = behav['episode'].max()
     else:
       lcs = pd.DataFrame()
@@ -90,12 +90,10 @@ def main(args=None):
         for timestep in range(1, defs.horizon): #in SARSA not useful if action prime does not exist
             play_start = time.time()
             state = pythia.State(KN_lc, KN_idx, contaminants, contaminant_lcs, contaminant_idx, timestep)
-            plotName = f'{outputDirectory}/{k}_{timestep}.png'
             state.KN_lc['position'] = KN_idx
             state.contaminant_lcs['position'] = state.contaminant_lcs['sim'].map(dict(zip(contaminants, contaminant_idx)))
-            choice_data = plot_utils.plot_state(pd.concat([state.KN_lc, state.contaminant_lcs]), plotName, agent,
+            choice_data = plot_utils.plot_state(pd.concat([state.KN_lc, state.contaminant_lcs]), agent, phase,
                                                 title=f'Episode {k}: Timestep {timestep}',
-                                                interact=True,
                                                 plots_window_size=plots_window_size,
                                                 number_of_transients=defs.N)
             #convert choice_data to action vector
@@ -114,8 +112,8 @@ def main(args=None):
         contaminant_lcs['episode'] = k
         contaminant_lcs['position'] = contaminant_lcs['sim'].map(dict(zip(contaminants, contaminant_idx)))
         lcs = pd.concat([lcs, KN_lc, contaminant_lcs])
-        lcs.to_csv(os.path.join(outputDirectory, 'lcs'+suff+'.csv'), index=False)
-        behav.to_csv(os.path.join(outputDirectory, 'behav'+suff+'.csv'), index=False)
+        lcs.to_csv(os.path.join(outputDirectory, 'lcs_'+phase+'.csv'), index=False)
+        behav.to_csv(os.path.join(outputDirectory, 'behav_'+phase+'.csv'), index=False)
 
 if __name__ == "__main__":
     main()

@@ -23,6 +23,12 @@ Note 1: you can only select 1 filter and 1 event at any timestep. If you check F
 
 Note 2: while you get a reward 1 regardless of which filter you obtain the observation in, you may want to think about how the information you get from that decision might help you in the next timestep.
 
+Note 3: if, for some reason you want to pause training or testing, just close the plotting window. Your progress is after each episode. Next time you resume, you will start where you left off from. Please try to refrain from switching between training and testing steps. Please only start testing if you are confident with your training.
+
+Note 4: Use flag --plots-window-size 8 to make the window smaller or larger. This may help with the funky window sizes depending on your system setup.
+
+Note 5: please report bugs!
+
 To train:
 `python human.py --train --agent <your initials>`
 
