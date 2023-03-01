@@ -7,8 +7,8 @@ from astropy.table import Table
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 import sncosmo
-import sfdmap
-dustmap = sfdmap.SFDMap('../aug/sfddata-master')
+#import sfdmap
+#dustmap = sfdmap.SFDMap('../aug/sfddata-master')
 import george
 
 window=7
