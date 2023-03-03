@@ -21,11 +21,20 @@ Next, you will be tested. In this phase, you will not know which the true KN is.
 
 Note 1: you can only select 1 filter and 1 event at any timestep. If you check Finished with none or more than one option selected in each, nothing will happen. Fix the issue, uncheck Finished, and check it again to proceed.
 
-Note 2: while you get a reward 1 regardless of which filter you obtain the observation in, you may want to think about how the information you get from that decision might help you in the next timestep.
+Note 2: while, in practice, you may not want to keep observing a transient if it has faded beyond detection limits, and perhaps spend that budget ruling out other events, it is hard to encode such an objective without using model-dependent discrimination criteria (which is not ideal for novel phenomena). In our case, you can interpret continuously allocating budget to your favored kilonova candidate, even after getting an upper limit, as following it up with another instrument. The design of a more realistic action space will be a subject of future work.
 
-Note 3: if, for some reason you want to pause training or testing, just close the plotting window. Your progress is saved after each episode. Next time you resume, you will start from where you left off. Please try to refrain from switching between training and testing steps. Only start testing if you are confident with your training.
+Note 3: while you get a reward 1 regardless of which filter you obtain the observation in, you may want to think about how the information you get from that decision might help you in the next timestep.
 
-Note 4: Use flag --plots-window-size <float> to make the window smaller or larger. This may help with the funky window sizes depending on your system setup.
+Note 4: if, for some reason you want to pause training or testing, just close the plotting window. Your progress is saved after each episode. Next time you resume, you will start from where you left off. Please try to refrain from switching between training and testing steps. Only start testing if you are confident with your training.
+
+Note 5: Use flag --plots-window-size <float> to make the window smaller or larger. This may help with the funky window sizes depending on your system setup.
+
+### Installation and Data files
+
+* Clone this repo.
+* Download [this](https://1drv.ms/u/s!At8xIP1B4oiJi-cSo5g2jJbBE_Bi5A?e=mBOVNp) folder and place it in the directory that you have checked out. The folder path should be Pythia/data.
+Password: `proti_Pythia`
+* Create an environment from the included yml as `conda env create -f environment.yml`. The environment will be named `kne`.
 
 #### To train:
 `python human.py --train --agent <your initials>`
@@ -36,11 +45,4 @@ Just close the plot window when you are done and want to take the test.
 `python human.py --agent <your initials>`
 
 When you are done, please share the files in your folder outdir/<your initials> with Ari along with a few sentences on what your strategy was. 
-
-## Installation and Data files
-
-* Clone this repo.
-* Download [this](https://1drv.ms/u/s!At8xIP1B4oiJi-cSo5g2jJbBE_Bi5A?e=mBOVNp) folder and place it in the directory that you have checked out. The folder path should be Pythia/data.
-Password: `proti_Pythia`
-* Create an environment from the included yml as `conda env create -f environment.yml`. The env will be named `kne`.
 
