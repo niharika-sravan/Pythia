@@ -50,36 +50,6 @@ def get_flux(LC):
   flux_err=abs(flux*LC['mag_err']*(np.log(10.)/2.5))
   return flux,flux_err
 
-def fit_Ia_model(meta,LC,spec_z=False):
-  flux,flux_err=utils.get_flux(LC)
-  data=Table()
-  if spec_z: data.meta['z']=float(meta['z'])
-  data['mjd']=LC['mjd'].tolist()
-  data['band']=LC['passband'].map(utils.sncosmo_band_name_dict).tolist()
-  data['flux']=flux.tolist()
-  data['flux_err']=flux_err.tolist()
-  data['zp']=LC['passband'].map(utils.ZTF_zp_dict).tolist()
-  data['zpsys']=['ab']*len(flux)
-  c=SkyCoord(meta['R.A.'],meta['Declination'],
-            unit=(u.hourangle, u.deg))
-  dust=sncosmo.CCM89Dust() #r_v=A(V)/E(B−V); A(V) is total extinction in V
-  model=sncosmo.Model(source='salt2',
-                      effects=[dust],
-                      effect_names=['mw'],
-                      effect_frames=['obs'])
-  ebv=dustmap.ebv(c) #ICRS frame
-  if not spec_z:
-    model.set(mwebv=ebv)
-    result,fitted_model=sncosmo.fit_lc(data,model,
-                                      ['z','t0','x0','x1','c'],
-                                      bounds={'z':(0.,0.2)})
-  else:
-    model.set(z=data.meta['z'],mwebv=ebv)  # set the model's redshift.
-    result,fitted_model=sncosmo.fit_lc(data,model,
-                                      ['t0','x0','x1','c'])
-
-  return result,fitted_model
-
 def GP_free(time,mag,mag_err,passband,LC_GP,k_corr_scale):
   def neg_ln_like(p):
     gp.set_parameter_vector(p)
