@@ -6,9 +6,6 @@ from scipy.optimize import minimize
 from astropy.table import Table
 from astropy.coordinates import SkyCoord
 from astropy import units as u
-import sncosmo
-#import sfdmap
-#dustmap = sfdmap.SFDMap('../aug/sfddata-master')
 import george
 
 window=7
@@ -54,14 +51,14 @@ def get_flux(LC):
   return flux,flux_err
 
 def fit_Ia_model(meta,LC,spec_z=False):
-  flux,flux_err=get_flux(LC)
+  flux,flux_err=utils.get_flux(LC)
   data=Table()
   if spec_z: data.meta['z']=float(meta['z'])
   data['mjd']=LC['mjd'].tolist()
-  data['band']=LC['passband'].map(sncosmo_band_name_dict).tolist()
+  data['band']=LC['passband'].map(utils.sncosmo_band_name_dict).tolist()
   data['flux']=flux.tolist()
   data['flux_err']=flux_err.tolist()
-  data['zp']=LC['passband'].map(ZTF_zp_dict).tolist()
+  data['zp']=LC['passband'].map(utils.ZTF_zp_dict).tolist()
   data['zpsys']=['ab']*len(flux)
   c=SkyCoord(meta['R.A.'],meta['Declination'],
             unit=(u.hourangle, u.deg))

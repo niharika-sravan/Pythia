@@ -1,4 +1,4 @@
-# KN follow-up toy problem
+# Toy KN follow-up problem
 Our agent is presented 9 transient forced photometry light curves from the Zwicky Transient Facility (ZTF) [public+private i-band survey and ToO during the first 1-2 days using 180/300s exposures for GW localizations >/<1000 sq deg], one of which is the KN and the rest are contaminants, chosen randomly from a list of supernovae and unassociated GRB afterglows. The agent observes the events on day 1 and on days 2 through 7 assigns one additional photometry with ZTF in g, r, or i using a deep 300s exposure to one of the events. The resulting forced photometry or upper limit is added in the next timestep. The agent gets a reward 1 if the follow-up is assigned to the KN, and 0 otherwise. 
 
 The objective is to maximize the number of follow-up assigned to the true KN. The maximum achievable score is 6. A random agent will achieve an expected score of 6/9 = 0.67
@@ -7,7 +7,7 @@ The objective is to maximize the number of follow-up assigned to the true KN. Th
 Pythia uses linear value function approximation to learn the optimal Q∗ in SARSA(0). It currently performs 3x better than random.
 
 ### Human players
-It is very hard to know what the optimal behavior policy (Pythia uses the Q-value and humans uses their brains) is for many problems. Therefore it is essential to compare against strong benchmarks to establish the utility of an approach. For our problem, astronomers will provide the benchmark.
+It is very hard to know what the optimal behavior policy (Pythia uses the Q-value and humans uses their brains) is for many sequential decision problems. Therefore it is essential to compare against strong benchmarks to establish the utility of an approach. For our problem, astronomers will provide the benchmark.
 
 We will be playing several of the following games.
 
@@ -23,11 +23,9 @@ Note 1: you can only select 1 filter and 1 event at any timestep. If you check F
 
 Note 2: while you get a reward 1 regardless of which filter you obtain the observation in, you may want to think about how the information you get from that decision might help you in the next timestep.
 
-Note 3: if, for some reason you want to pause training or testing, just close the plotting window. Your progress is after each episode. Next time you resume, you will start from where you left off. Please try to refrain from switching between training and testing steps. Only start testing if you are confident with your training.
+Note 3: if, for some reason you want to pause training or testing, just close the plotting window. Your progress is saved after each episode. Next time you resume, you will start from where you left off. Please try to refrain from switching between training and testing steps. Only start testing if you are confident with your training.
 
-Note 4: Use flag --plots-window-size 8 to make the window smaller or larger. This may help with the funky window sizes depending on your system setup.
-
-Note 5: please report bugs!
+Note 4: Use flag --plots-window-size <float> to make the window smaller or larger. This may help with the funky window sizes depending on your system setup.
 
 #### To train:
 `python human.py --train --agent <your initials>`
@@ -37,12 +35,12 @@ Just close the plot window when you are done and want to take the test.
 #### To test:
 `python human.py --agent <your initials>`
 
-Please share the files in your folder outdir/<your initials> with Ari along with a few sentences on what your strategy was. 
+When you are done, please share the files in your folder outdir/<your initials> with Ari along with a few sentences on what your strategy was. 
 
 ## Installation and Data files
 
 * Clone this repo.
 * Download [this](https://1drv.ms/u/s!At8xIP1B4oiJi-cSo5g2jJbBE_Bi5A?e=mBOVNp) folder and place it in the directory that you have checked out. The folder path should be Pythia/data.
 Password: `proti_Pythia`
-* Create an environment from the included yml as `conda env create -f environment.yml`. The env will be named kne.
+* Create an environment from the included yml as `conda env create -f environment.yml`. The env will be named `kne`.
 

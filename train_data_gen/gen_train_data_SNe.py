@@ -16,7 +16,7 @@ from astropy.coordinates import SkyCoord
 import sfdmap
 dustmap = sfdmap.SFDMap('../aug/sfddata-master')
 
-import utils
+import utils, funcs
 import argparse
 
 parser=argparse.ArgumentParser()
@@ -35,7 +35,7 @@ noise=load('data/noise_kde_gri.joblib')
 def resimulate_Ia(meta,LC,sim,z_new,ra_new,dec_new):
   success=True
   try:
-    result,fitted_model=utils.fit_Ia_model(meta,LC,spec_z=True)
+    result,fitted_model=funcs.fit_Ia_model(meta,LC,spec_z=True)
     if result.chisq>300.: success=False
   except RuntimeError:
     success=False

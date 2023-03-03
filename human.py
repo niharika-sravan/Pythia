@@ -95,7 +95,7 @@ def main(args=None):
             choice_data = plot_utils.plot_state(pd.concat([state.KN_lc, state.contaminant_lcs]), agent, phase,
                                                 title=f'Episode {k}: Timestep {timestep}',
                                                 plots_window_size=plots_window_size,
-                                                number_of_transients=defs.N)
+                                                number_of_transients=defs.N, KN_name = KN, KN_loc = KN_idx)
             #convert choice_data to action vector
             action = np.zeros((defs.n_filt * defs.N, 1))
             choice_idx = 3*(choice_data['position'])+choice_data['passband']

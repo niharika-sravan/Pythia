@@ -5,7 +5,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.widgets import CheckButtons
 
-def plot_state(lcs, agent, phase, number_of_transients=None, title=None, xlim=[0,7], plots_window_size=10):
+def plot_state(lcs, agent, phase, number_of_transients=None, title=None, xlim=[0,7], plots_window_size=10, KN_name = None, KN_loc = None):
 
     pass_to_color = {1: 'g', 2: 'r', 3: 'k'}
     global choice_data
@@ -33,9 +33,8 @@ def plot_state(lcs, agent, phase, number_of_transients=None, title=None, xlim=[0
         ax = fig.add_subplot(gs[loc_x, loc_y])
 
         title_text = '#'+str(ii)
-        if phase == 'train':
-          if lc_obj['sim'].sample().item().startswith(('BNS', 'NSBH')):
-            title_text = title_text+' '+lc_obj['sim'].sample().item().split('_')[0]
+        if (phase == 'train' and ii == KN_loc):
+            title_text = title_text+' '+KN_name.split('_')[0]
         ax.set_title(title_text, fontsize=16)
 
         if not transient_present:
