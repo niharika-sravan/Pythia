@@ -20,8 +20,8 @@ conda activate kne
 cd /expanse/lustre/projects/umn131/niharika/Pythia
 
 ## submit the dependency that will start after the current job finishes
-sbatch --dependency=afterany:${{SLURM_JOBID}} temp/{0}.sub
-sleep 300
+## sbatch --dependency=afterany:${{SLURM_JOBID}} temp/{0}.sub
+## sleep 300
 
 '''
 
@@ -32,8 +32,8 @@ n_list = [4.]#, 3.]
 for i, alpha in enumerate(alpha_list):
   for j, gamma in enumerate(gamma_list):
     for k, n in enumerate(n_list):
-      #cmd = 'python train.py '+str(alpha)+' '+str(gamma)+' '+str(n)+' random'
-      cmd = 'python train.py '+str(alpha)+' '+str(gamma)+' '+str(n)+' resume'
+      cmd = 'python train.py '+str(alpha)+' '+str(gamma)+' '+str(n)+' random'
+      #cmd = 'python train.py '+str(alpha)+' '+str(gamma)+' '+str(n)+' resume'
       job_name = 'train_'+str(alpha)+'_'+str(gamma)+'_'+str(n)
       with open('temp/'+job_name+'.sub', 'w') as f:
         f.writelines(jobstr.format(job_name)+cmd)

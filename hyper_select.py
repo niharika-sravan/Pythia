@@ -11,9 +11,9 @@ import defs
 
 dest = 'outdir/n9'
 
-alpha_list = [1e-2, 1e-3]
+alpha_list = [1e-1, 1e-2, 1e-3]
 gamma_list = [0.9, 0.5, 0.1]
-n_list = [3.]
+n_list = [4.]
 smooth = 50
 rows,cols = len(alpha_list), len(gamma_list)
 
