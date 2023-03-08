@@ -14,11 +14,11 @@ def plot_state(lcs, agent, phase, number_of_transients=None, title=None, xlim=[0
 
     lc_objs = lcs.groupby('position')
 
-    fig = plt.figure(figsize=(plots_window_size*1.1, plots_window_size))
+    fig = plt.figure(figsize=(plots_window_size*1.2, plots_window_size))
 
     ncols = 3
     nrows = int(np.ceil(number_of_transients / ncols))
-    gs = fig.add_gridspec(nrows=nrows, ncols=ncols, wspace=0.25, hspace=0.25)
+    gs = fig.add_gridspec(nrows=nrows, ncols=ncols, wspace=0.25, hspace=0.25, top=0.95, left=0.1)
 
     for ii in range(number_of_transients):
         for jj, (group_position, lc_obj) in enumerate(lc_objs):
@@ -52,30 +52,34 @@ def plot_state(lcs, agent, phase, number_of_transients=None, title=None, xlim=[0
                 color = pass_to_color[passband[0]]
                 if group_survey == agent:
                     det_marker = 'x'
-                    upper_marker = '1'
+                    upper_marker = 'v'
                 else:
                     det_marker = 'o'
                     upper_marker = 'v'
 
                 idx = np.where(np.isfinite(sigma_y))[0]
-                if len(idx) > 0:
-                    ax.errorbar(
-                        t[idx],
-                        y[idx],
-                        sigma_y[idx],
-                        fmt=det_marker,
-                        color=color,
-                        markersize=12,
-                    )
+                try:
+                  if len(idx) > 0:
+                      ax.errorbar(
+                          t[idx],
+                          y[idx],
+                          sigma_y[idx],
+                          fmt=det_marker,
+                          color=color,
+                          markersize=8,
+                      )
+                except ValueError:
+                  print(lc_survey)
+                  raise
 
                 idx = np.where(~np.isfinite(sigma_y))[0]
                 if len(idx) > 0:
-                    ax.plot(
+                    ax.scatter(
                         t[idx],
                         y[idx],
                         marker=upper_marker,
                         color=color,
-                        markersize=12,
+                        s=20,
                     )
 
         ax.set_xlim(xlim)
@@ -95,7 +99,7 @@ def plot_state(lcs, agent, phase, number_of_transients=None, title=None, xlim=[0
     passbands = ['g', 'r', 'i']
     passbands_label = [False] * len(passbands)
 
-    ax_passbands = plt.axes([0.05, 0.9, 0.1, 0.1])
+    ax_passbands = plt.axes([0.92, 0.6, 0.1, 0.1])
     passband_button = CheckButtons(ax_passbands, passbands, passbands_label)
     passband_button.on_clicked(func_passbands)
 
@@ -106,15 +110,15 @@ def plot_state(lcs, agent, phase, number_of_transients=None, title=None, xlim=[0
 
     positions_label = [False] * number_of_transients
 
-    ax_positions = plt.axes([0.85, 0.85, 0.2, 0.15])
+    ax_positions = plt.axes([0.92, 0.75, 0.2, 0.2])
     position_button = CheckButtons(ax_positions, list(range(number_of_transients)), positions_label)
     position_button.on_clicked(func_positions)
 
     def func_close(label):
-        if sum(passband_button.get_status()) == 1 and sum(position_button.get_status()) == 1 and sum(close_button.get_status()):
-          plt.close()
+      if sum(passband_button.get_status()) == 1 and sum(position_button.get_status()) == 1 and sum(close_button.get_status()):
+        plt.close()
 
-    ax_close = plt.axes([0.45, 0.92, 0.1, 0.05])
+    ax_close = plt.axes([0.92, 0.45, 0.1, 0.1])
     close_button = CheckButtons(ax_close, ['Finished'], [False])
     close_button.on_clicked(func_close)
 

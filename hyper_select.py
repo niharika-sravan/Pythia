@@ -26,7 +26,7 @@ for n in n_list:
     for c in range(cols):
         sax.append(plt.subplot(gs[cols*r+c]))
 
-  n_episodes = int((0.99/0.01)**n)
+  n_episodes = int((0.99/0.05)**n)
 
   R_tau = np.zeros(n_episodes)
   for i in range(np.shape(R_tau)[0]):

@@ -29,7 +29,9 @@ Note 4: if, for some reason you want to pause training or testing, just close th
 
 Note 5: Use flag --plots-window-size <float> to make the window smaller or larger. This may help with the funky window sizes depending on your system setup.
 
-### Installation and Data files
+Note 6: green denotes g, red denoted r, and black denotes i filters.
+
+#### Installation and Data files
 
 * Clone this repo.
 * Download [this](https://1drv.ms/u/s!At8xIP1B4oiJi-cSo5g2jJbBE_Bi5A?e=mBOVNp) folder and place it in the directory that you have checked out. The folder path should be Pythia/data.
