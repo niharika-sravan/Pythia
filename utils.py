@@ -82,18 +82,20 @@ def GP_free(time,mag,mag_err,passband,LC_GP,k_corr_scale):
   LC_GP['mag_err']=np.sqrt(mag_var)
   return LC_GP
 
-def estimate_mag_err(df):
-  df['mag_err']=df.apply(
-                lambda x: (uncer_params['band']==x['passband']) &
-                          (pd.arrays.IntervalArray(
-                            uncer_params['interval']).contains(x['mag'])),
-                          axis=1).apply(
-                lambda x: stats.skewnorm.rvs(
-                            uncer_params[x]['a'],
-                            uncer_params[x]['loc'],
-                            uncer_params[x]['scale']
-                                            ), axis=1)
-  return df
+def estimate_mag_err(phot):
+  phot['mag_err'] = 0.
+  while (phot['mag_err'] <= 0).item():
+    phot['mag_err']=phot.apply(
+                    lambda x: (uncer_params['band']==x['passband']) &
+                              (pd.arrays.IntervalArray(
+                                uncer_params['interval']).contains(x['mag'])),
+                              axis=1).apply(
+                    lambda x: stats.skewnorm.rvs(
+                                uncer_params[x]['a'],
+                                uncer_params[x]['loc'],
+                                uncer_params[x]['scale']
+                                                ), axis=1)
+  return phot
 
 def estimate_GP_mag(df,LC,band_list,sim_err=True,kernel='SE'):
   GP=pd.DataFrame(data=np.vstack((np.repeat(df['mjd'].values,len(band_list)),

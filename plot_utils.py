@@ -5,7 +5,8 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.widgets import CheckButtons
 
-def plot_state(lcs, agent, phase, number_of_transients=None, title=None, xlim=[0,7], plots_window_size=10, KN_name = None, KN_loc = None):
+def plot_state(lcs, agent, phase, label_all, number_of_transients=None, title=None, xlim=[0,7], plots_window_size=10,
+               KN_name = None, KN_loc = None, contaminant_name = None, contaminant_loc = None):
 
     pass_to_color = {1: 'g', 2: 'r', 3: 'k'}
     global choice_data
@@ -33,8 +34,11 @@ def plot_state(lcs, agent, phase, number_of_transients=None, title=None, xlim=[0
         ax = fig.add_subplot(gs[loc_x, loc_y])
 
         title_text = '#'+str(ii)
-        if (phase == 'train' and ii == KN_loc):
-            title_text = title_text+' '+KN_name.split('_')[0]
+        if (phase == 'train'):
+            if ii == KN_loc:
+                title_text = title_text+' '+KN_name.split('_')[0]
+            elif label_all:
+                title_text = title_text+' '+contaminant_name[contaminant_loc.index(ii)].split('_')[0]
         ax.set_title(title_text, fontsize=16)
 
         if not transient_present:
@@ -58,19 +62,15 @@ def plot_state(lcs, agent, phase, number_of_transients=None, title=None, xlim=[0
                     upper_marker = 'v'
 
                 idx = np.where(np.isfinite(sigma_y))[0]
-                try:
-                  if len(idx) > 0:
-                      ax.errorbar(
-                          t[idx],
-                          y[idx],
-                          sigma_y[idx],
-                          fmt=det_marker,
-                          color=color,
-                          markersize=8,
-                      )
-                except ValueError:
-                  print(lc_survey)
-                  raise
+                if len(idx) > 0:
+                    ax.errorbar(
+                        t[idx],
+                        y[idx],
+                        yerr=sigma_y[idx],
+                        fmt=det_marker,
+                        color=color,
+                        markersize=8,
+                    )
 
                 idx = np.where(~np.isfinite(sigma_y))[0]
                 if len(idx) > 0:
@@ -79,7 +79,7 @@ def plot_state(lcs, agent, phase, number_of_transients=None, title=None, xlim=[0
                         y[idx],
                         marker=upper_marker,
                         color=color,
-                        s=20,
+                        s=25,
                     )
 
         ax.set_xlim(xlim)
@@ -90,32 +90,19 @@ def plot_state(lcs, agent, phase, number_of_transients=None, title=None, xlim=[0
     if title is not None:
         fig.text(0.3, 0.01, title, fontsize=30)
 
-
-    def func_passbands(label):
-        global choice_data
-        passband = passbands.index(label)
-        choice_data['passband'] = passband
+    positions_label = [False] * number_of_transients
+    ax_positions = plt.axes([0.92, 0.75, 0.2, 0.2])
+    position_button = CheckButtons(ax_positions, list(range(number_of_transients)), positions_label)
 
     passbands = ['g', 'r', 'i']
     passbands_label = [False] * len(passbands)
-
     ax_passbands = plt.axes([0.92, 0.6, 0.1, 0.1])
     passband_button = CheckButtons(ax_passbands, passbands, passbands_label)
-    passband_button.on_clicked(func_passbands)
-
-    def func_positions(label):
-        global choice_data
-        choice_data['position'] = int(label)
-        chosen_event = True
-
-    positions_label = [False] * number_of_transients
-
-    ax_positions = plt.axes([0.92, 0.75, 0.2, 0.2])
-    position_button = CheckButtons(ax_positions, list(range(number_of_transients)), positions_label)
-    position_button.on_clicked(func_positions)
 
     def func_close(label):
       if sum(passband_button.get_status()) == 1 and sum(position_button.get_status()) == 1 and sum(close_button.get_status()):
+        choice_data['passband'] = int(np.where(passband_button.get_status())[0])
+        choice_data['position'] = int(np.where(position_button.get_status())[0])
         plt.close()
 
     ax_close = plt.axes([0.92, 0.45, 0.1, 0.1])

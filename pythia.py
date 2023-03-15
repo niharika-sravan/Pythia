@@ -159,9 +159,7 @@ def get_photo(lc_all, lc, time_obs, filter, agent):
   else: #FIXME: using same as r
       set_lim(obs, float(defs.lim2_ToO.sample()))
   if (obs['mag_err'] != np.inf).item():
-    obs['mag_err'] = 0.
-    while (obs['mag_err'] <= 0).item():
-      obs = utils.estimate_mag_err(obs)
+    obs = utils.estimate_mag_err(obs)
   obs['sim'] = sim
   obs['tc'] = tc
   obs['survey'] = agent

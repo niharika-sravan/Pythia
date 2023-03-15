@@ -20,6 +20,11 @@ def get_parser():
         action="store_true"
     )
     parser.add_argument(
+        "--label-all",
+        help="All events will be labeled.",
+        action="store_true"
+    )
+    parser.add_argument(
         "--agent",
         type=str,
         default="Human",
@@ -51,6 +56,7 @@ def main(args=None):
         args = parser.parse_args()
 
     train = args.train
+    label_all = args.label_all
     n_episodes = args.n_episodes
     agent = args.agent
     plots_window_size = args.plots_window_size
@@ -92,10 +98,11 @@ def main(args=None):
             state = pythia.State(KN_lc, KN_idx, contaminants, contaminant_lcs, contaminant_idx, timestep)
             state.KN_lc['position'] = KN_idx
             state.contaminant_lcs['position'] = state.contaminant_lcs['sim'].map(dict(zip(contaminants, contaminant_idx)))
-            choice_data = plot_utils.plot_state(pd.concat([state.KN_lc, state.contaminant_lcs]), agent, phase,
+            choice_data = plot_utils.plot_state(pd.concat([state.KN_lc, state.contaminant_lcs]), agent, phase, label_all,
                                                 title=f'Episode {k}: Timestep {timestep}',
                                                 plots_window_size=plots_window_size,
-                                                number_of_transients=defs.N, KN_name = KN, KN_loc = KN_idx)
+                                                number_of_transients=defs.N, KN_name = KN, KN_loc = KN_idx,
+                                                contaminant_name = contaminants, contaminant_loc = contaminant_idx)
             #convert choice_data to action vector
             action = np.zeros((defs.n_filt * defs.N, 1))
             choice_idx = 3*(choice_data['position'])+choice_data['passband']
@@ -114,6 +121,20 @@ def main(args=None):
         lcs = pd.concat([lcs, KN_lc, contaminant_lcs])
         lcs.to_csv(os.path.join(outputDirectory, 'lcs_'+phase+'.csv'), index=False)
         behav.to_csv(os.path.join(outputDirectory, 'behav_'+phase+'.csv'), index=False)
+
+    dist_dict = dict(zip(data.KN_lc['sim'], data.KN_lc['luminosity_distance']))
+    kws = behav['event_chosen'].str.split('_')
+    behav['type'] = kws.str[0]#.map(typ_dict)
+    lcs['luminosity_distance'] = lcs['sim'].map(dist_dict)
+    eps_faint = lcs[lcs['luminosity_distance'] > 150.]['episode'].unique()
+    behav_faint = behav[behav['episode'].isin(eps_faint)]
+    print('Thank you for playing! Here are your scores')
+    print('Agent score score_faint frac frac_faint')
+    print(agent,
+        round(behav[behav['type'].isin(['NSBH','BNS'])].shape[0]/behav.shape[0]*(defs.horizon-1), 2),
+        round(behav_faint[behav_faint['type'].isin(['NSBH','BNS'])].shape[0]/behav_faint.shape[0]*(defs.horizon-1), 2),
+        round(behav[behav['type'].isin(['NSBH','BNS'])]['episode'].nunique()/behav['episode'].max(), 2),
+        round(behav_faint[behav_faint['type'].isin(['NSBH','BNS'])]['episode'].nunique()/len(eps_faint), 2))
 
 if __name__ == "__main__":
     main()
