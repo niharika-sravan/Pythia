@@ -1,10 +1,9 @@
-data/
-temp/
-outdir/
-vis/
-__pycache__/
+pythia/data/
+pythia/outdir/
+pythia/vis
+pythia/temp/
+pythia/train_data_gen/get_train_params.py
+pythia/__pycache__/
+pythia/.DS_Store/
 .DS_Store
 .idea
-train_data_gen/get_train_params.py
-
-*.csv

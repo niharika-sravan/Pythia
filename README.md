@@ -37,6 +37,8 @@ Note 6: green denotes g, red denoted r, and black denotes i filters.
 * Download [this](https://1drv.ms/u/s!At8xIP1B4oiJi-cSo5g2jJbBE_Bi5A?e=mBOVNp) folder and place it in the directory that you have checked out. The folder path should be Pythia/data.
 Password: `proti_Pythia`
 * Create an environment from the included yml as `conda env create -f environment.yml`. The environment will be named `kne`.
+* `pip install .`
+* `cd pythia`
 
 #### To train:
 `python human.py --train --agent <your initials>`
