@@ -1,6 +1,6 @@
 pythia/data/
 pythia/outdir/
-pythia/vis
+pythia/vis/
 pythia/temp/
 pythia/train_data_gen/get_train_params.py
 pythia/__pycache__/
